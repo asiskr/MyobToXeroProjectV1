@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.example</groupId>
+	<artifactId>XlsReaderProject</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<!-- Apache POI for reading .xls files -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.17</version> <!-- Compatible version for Java 1.8 -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<!-- XMLBeans for POI -->
+		<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>5.8</version> <!-- Use a compatible version -->
+		</dependency>
+	</dependencies>
+</project>
