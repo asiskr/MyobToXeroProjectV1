@@ -9,6 +9,7 @@ public class AssetData {
 	private Object bookRate;
 	private Object closingBookRate;
 	private Object bookAccumulatedDepreciation;
+	private Object depnMethod;
 	public Object getBookAccumulatedDepreciation() {
 		return bookAccumulatedDepreciation;
 	}
@@ -57,5 +58,10 @@ public class AssetData {
 	public void setAssetType(Object assetType) {
 		AssetType = assetType;
 	}
-	
+	public Object getDepnMethod() {
+		return depnMethod;
+	}
+	public void setDepnMethod(Object depnMethod) {
+		this.depnMethod = depnMethod;
+	}
 }
