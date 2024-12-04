@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -214,32 +215,43 @@ public class ReadXlsFile {
 		}
 		return assetList;
 	}
-	private static String formatDate(Object date) {
-	    if (date instanceof String) {
-	        String dateStr = (String) date;
-	        if (dateStr.startsWith("(") && dateStr.endsWith(")")) {
-	            dateStr = dateStr.substring(1, dateStr.length() - 1); 
-	            System.out.println("Date retained: " + dateStr + " (Notice: Original format retained)");
-	            return dateStr + " (Notice: Original format retained)";
-	        }
+    private static String formatDate(Object date) {
+        if (date instanceof String) {
+            String dateStr = (String) date;
 
-	        return dateStr;
-	    }
+            // Handle "dd-MMM-yyyy" format (e.g., "02-Oct-2009")
+            if (dateStr.matches("\\d{2}-[a-zA-Z]{3}-\\d{4}")) {
+                try {
+                    // Parse "dd-MMM-yyyy" into a Date object
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                    Date parsedDate = inputFormat.parse(dateStr);
 
-	    if (date instanceof java.util.Date) {
-	        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-	        return sdf.format((java.util.Date) date);
-	    }
+                    // Format into "M/d/yyyy"
+                    SimpleDateFormat outputFormat = new SimpleDateFormat("M/d/yyyy");
+                    return outputFormat.format(parsedDate);
+                } catch (ParseException e) {
+                    // Handle parsing error
+                    System.out.println("Error parsing date: " + dateStr);
+                    return "";
+                }
+            }
 
-	    if (date instanceof Double) {
-	        java.util.Date excelDate = org.apache.poi.ss.usermodel.DateUtil.getJavaDate((Double) date);
-	        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-	        return sdf.format(excelDate);
-	    }
+            // General "dd-mm-yyyy" or "dd-mm-yy" handling
+            if (dateStr.matches("\\d{2}-\\d{2}-\\d{2,4}")) {
+                String[] parts = dateStr.split("-");
+                return Integer.parseInt(parts[1]) + "/" + Integer.parseInt(parts[0]) + "/" + parts[2];
+            }
 
-	    return "";
-	}
+            // Replace '-' with '/' if present but no specific pattern matched
+            if (dateStr.contains("-")) {
+                return dateStr.replace("-", "/");
+            }
 
+            return dateStr;
+        }
+
+        return "";
+    }
 	private static void writeCSVFile(Set<AssetData> assetListSet ,File inputFile,File outputDirectory) {
 
 		String[][] data = new String [assetListSet.size()][31];
@@ -265,7 +277,7 @@ public class ReadXlsFile {
 			data[i][17] = a.getBookRate().toString();
 			data[i][18] = "";
 			data[i][19] = a.getBookAccumulatedDepreciation().toString();
-			data[i][20] = "";
+			data[i][20] =  a.getDepnMethod().toString();
 			data[i][21] = "";
 			data[i][22] = "";
 			data[i][23] = "";
